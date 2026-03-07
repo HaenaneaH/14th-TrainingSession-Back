@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-m-2-ie+my=t!oe%$a)salv3t1v*65d8f9$a+0p@b(8czwc6^hu
 # DEBUG = False # 배포 시 False로 변경
 DEBUG = True
 
-ALLOWED_HOSTS = ['likelion2026.pythonanywhere.com']
+ALLOWED_HOSTS = ['likelion2026.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
