@@ -1,41 +1,27 @@
 from django.db import models
 
-
-
-class Hashtag(models.Model):
-    hashtag = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.hashtag
-    
-
+LANGUAGE_CHOICES = (
+    (1, "KOR"),
+    (2, "ENG"),
+    (3, "JPN"),
+    (4, "CHN"),
+)
 
 class Post(models.Model):
-    title = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField(max_length=500)
-    photo = models.ImageField(blank=True, null=True, upload_to="post_photo")
-    hashtag = models.ManyToManyField(Hashtag)
-    
+    title = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    body = models.TextField()
+    language = models.IntegerField(choices=LANGUAGE_CHOICES)
+
     def __str__(self):
         return self.title
-    
-    def summary(self):
-        return self.content[:100]
-    
+                            
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     username = models.CharField(max_length=20)
     comment_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    def approve(self):
-        self.save()
-        
+
     def __str__(self):
-        return self.comment_text
-    
-
-
-    
+        return self.comment_text[:20]
