@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,15 +22,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--z%**i=9b)*tqq^g&m0eh#vo$q#h!%%ov)@qhgltc-eo#lhoi^'
+SECRET_KEY = 'django-insecure-y0y#4xw2g=ay*_e3k5d4a2(l9)&pw+ctn%1d27*iit=!0qv_0l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# 어디서 보낸 요청을 웹사이트에 허용할 것인지
 ALLOWED_HOSTS = []
 
 
 # Application definition
+AUTH_USER_MODEL='accounts.CustomUser'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,9 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'blog',
-]
+    'accounts.apps.AccountsConfig',
+    'blog.apps.BlogConfig',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,12 +108,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# 사용자 테이블 설정
+AUTH_USER_MODEL = 'accounts.CustomUser' #이거 수정!!!!!!!
 
-TIME_ZONE = 'UTC'
+# 언어 설정
+LANGUAGE_CODE = 'ko-kr'
 
+# 시간대 설정
+TIME_ZONE = 'Asia/Seoul'
+
+# 한국어 번역 적용
 USE_I18N = True
 
+# 한국 날짜·숫자 형식
 USE_TZ = True
 
 
@@ -117,6 +128,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    os.path.join(BASE_DIR, 'blog', 'static'),
+]
+
+STATIC_ROOT = os.path.join('staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
