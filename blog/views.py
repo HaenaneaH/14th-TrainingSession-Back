@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class CommentView(APIView):
@@ -16,6 +17,8 @@ class CommentView(APIView):
    
 
 class PostListView(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request:HttpRequest, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
@@ -43,7 +46,7 @@ class PostDetailView(APIView):
     def put(self, request:HttpRequest, pk, format=None):
        post = self.get_object(pk)
        serializer = PostSerializer(post, data=request.data)
-       if serializer.is_vail():
+       if serializer.is_valid():
           serializer.save()
           return Response(serializer.data, status=status.HTTP_200_OK)
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
