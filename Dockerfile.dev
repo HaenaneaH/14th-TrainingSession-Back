@@ -1,0 +1,35 @@
+# 1. 파이썬 3.11.9 버전의 기본 OS/환경을 가져옵니다.
+
+FROM python:3.11.9
+
+
+# 2. 도커 컨테이너 내부에서 작업할 기본 폴더 위치를 지정합니다.
+
+WORKDIR /app
+
+
+# 3. 호스트 PC의 requirements.txt를 컨테이너 안으로 먼저 복사합니다.
+
+COPY requirements.txt .
+
+
+# 4. 의존성 패키지들을 컨테이너 안에서 설치합니다.
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+# 5. 나머지 내 장고 소스 코드 전체를 컨테이너 내부로 복사합니다.
+
+COPY . .
+
+
+# 6. 컨테이너가 8000번 포트를 사용할 것임을 명시합니다.
+
+EXPOSE 8000
+
+
+# 7. 컨테이너가 켜질 때 실행될 최종 명령어를 입력합니다.
+
+# ★주의★ IP를 127.0.0.1이 아닌 0.0.0.0으로 열어야 외부 PC 접속이 가능합니다!
+
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
