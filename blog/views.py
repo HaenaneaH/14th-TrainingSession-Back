@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import FormParser, MultiPartParser
+
 
 
 class CommentView(APIView):
@@ -18,6 +20,7 @@ class CommentView(APIView):
 
 class PostListView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
     
     def get(self, request:HttpRequest, format=None):
         posts = Post.objects.all()
@@ -32,18 +35,21 @@ class PostListView(APIView):
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostDetailView(APIView):
-    def get_object(self, pk):
+   parser_classes = [MultiPartParser, FormParser]
+
+
+   def get_object(self, pk):
       try:
          return Post.objects.get(pk=pk)
       except Post.DoesNotExist:
          raise Http404
       
-    def get(self, request:HttpRequest, pk, format=None):
+   def get(self, request:HttpRequest, pk, format=None):
       post = self.get_object(pk)
       serializer = PostSerializer(post)
       return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def put(self, request:HttpRequest, pk, format=None):
+   def put(self, request:HttpRequest, pk, format=None):
        post = self.get_object(pk)
        serializer = PostSerializer(post, data=request.data)
        if serializer.is_valid():
@@ -51,10 +57,11 @@ class PostDetailView(APIView):
           return Response(serializer.data, status=status.HTTP_200_OK)
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request:HttpRequest, pk, format=None):
+   def delete(self, request:HttpRequest, pk, format=None):
       post = self.get_object(pk)
       post.delete()
       return Response(status=status.HTTP_204_NO_CONTENT)
+
+
    
-       
     
