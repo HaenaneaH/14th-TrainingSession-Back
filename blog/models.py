@@ -12,6 +12,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
     language = models.IntegerField(choices=LANGUAGE_CHOICES)
+    image = models.ImageField(upload_to='posts/', blank=True, null=True) # 추가s
 
     def __str__(self):
         return self.title
@@ -25,11 +26,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment_text[:20]
-
-# Post 클래스에 image 필드 추가
-class Post(models.Model):
-    title = models.CharField(max_length=200)
-    date = models.DateTimeField(auto_now_add=True)
-    body = models.TextField()
-    language = models.IntegerField(choices=LANGUAGE_CHOICES)
-    image = models.ImageField(upload_to='posts/', blank=True, null=True) # 추가s
